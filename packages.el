@@ -49,6 +49,7 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
+(package! beacon)
 (when (package! eaf :recipe (:host github
                              :repo "emacs-eaf/emacs-application-framework"
                              :files ("*")
