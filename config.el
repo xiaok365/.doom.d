@@ -210,3 +210,26 @@
 ;;                                           (top-or-bottom . bottom)
 ;;                                           (top-or-bottom-pos . -100)))
 ;;   (mouse-avoidance-mode 'banish))
+
+;; scroll smoothly
+
+(require 'sublimity)
+(require 'sublimity-scroll)
+;; (require 'sublimity-map) ;; experimental
+;; (require 'sublimity-attractive)
+
+(sublimity-mode 1)
+(setq sublimity-scroll-weight 1
+      sublimity-scroll-drift-length 50)
+
+;; (setq sublimity-map-size 20)
+;; (setq sublimity-map-fraction 0.3)
+;; (setq sublimity-map-text-scale -7)
+;; (sublimity-map-set-delay nil)
+
+;; (setq sublimity-attractive-centering-width 110)
+;;
+;; (sublimity-attractive-hide-bars)
+;; (sublimity-attractive-hide-vertical-border)
+;; (sublimity-attractive-hide-fringes)
+;; (sublimity-attractive-hide-modelines)

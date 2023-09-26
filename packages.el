@@ -58,3 +58,4 @@
 ;;   (package! ctable :recipe (:host github :repo "kiwanami/emacs-ctable"))
 ;;   (package! deferred :recipe (:host github :repo "kiwanami/emacs-deferred"))
 ;;   (package! epc :recipe (:host github :repo "kiwanami/emacs-epc")))
+(package! sublimity)
