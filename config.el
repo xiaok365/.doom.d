@@ -219,8 +219,9 @@
 ;; (require 'sublimity-attractive)
 
 (sublimity-mode 1)
-(setq sublimity-scroll-weight 1
-      sublimity-scroll-drift-length 50)
+(setq sublimity-scroll-weight 5
+      sublimity-scroll-drift-length 10)
+(setq sublimity-scroll-vertical-frame-delay 0.01)
 
 ;; (setq sublimity-map-size 20)
 ;; (setq sublimity-map-fraction 0.3)
