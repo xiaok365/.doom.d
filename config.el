@@ -18,7 +18,7 @@
   (advice-add 'url-http :around 'mb-url-http-around-advice))
 
 ;; Automatically updating feed when opening elfeed
-(add-hook! 'elfeed-search-mode-hook #'elfeed-update)
+;; (add-hook! 'elfeed-search-mode-hook #'elfeed-update)
 
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
