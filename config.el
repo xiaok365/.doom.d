@@ -234,3 +234,26 @@
 ;; (sublimity-attractive-hide-vertical-border)
 ;; (sublimity-attractive-hide-fringes)
 ;; (sublimity-attractive-hide-modelines)
+
+;; markdown
+
+(custom-set-faces!
+'(markdown-header-delimiter-face :foreground "#616161" :height 0.9)
+'(markdown-header-face-1 :height 1.7 :foreground "#A3BE8C" :weight extra-bold :inherit markdown-header-face)
+'(markdown-header-face-2 :height 1.6 :foreground "#EBCB8B" :weight extra-bold :inherit markdown-header-face)
+'(markdown-header-face-3 :height 1.5 :foreground "#D08770" :weight extra-bold :inherit markdown-header-face)
+'(markdown-header-face-4 :height 1.4 :foreground "#BF616A" :weight bold :inherit markdown-header-face)
+'(markdown-header-face-5 :height 1.3 :foreground "#b48ead" :weight bold :inherit markdown-header-face)
+'(markdown-header-face-6 :height 1.2 :foreground "#5e81ac" :weight semi-bold :inherit markdown-header-face))
+
+;; (use-package markdown-mode :ensure t
+;;   :init
+;;   (setq-default markdown-hide-markup t))
+
+;; split window
+(defun prefer-horizontal-split ()
+  (set-variable 'split-height-threshold nil t)
+  (set-variable 'split-width-threshold 40 t)) ; make this as low as needed
+(add-hook 'markdown-mode-hook 'prefer-horizontal-split)
+(map! :leader
+      :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window)
