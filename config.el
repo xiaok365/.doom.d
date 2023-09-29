@@ -5,8 +5,12 @@
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
 ;; (add-hook 'window-setup-hook #'toggle-frame-fullscreen)
 
-(setq socks-proxy "http://127.0.0.1:1087")
+(setq url-proxy-services
+   '(("no_proxy" . "^\\(localhost\\|10\\..*\\|192\\.168\\..*\\)")
+     ("http" . "127.0.0.1:1087")
+     ("https" . "127.0.0.1:1087")))
 
+(setq http-proxy "http://127.0.0.1:1087")
 (setq elfeed-goodies/entry-pane-size 0.5)
 (use-package mb-url-http
   ;; :load-path "~/.emacs.d/mb-url"
@@ -14,7 +18,7 @@
   :commands (mb-url-http-around-advice)
   :init
   (setq mb-url-http-backend 'mb-url-http-curl
-        mb-url-http-curl-switches `("--max-time" "20" "-x" ,socks-proxy))
+        mb-url-http-curl-switches `("--max-time" "20" "-x" ,http-proxy))
   (advice-add 'url-http :around 'mb-url-http-around-advice))
 
 ;; Automatically updating feed when opening elfeed
@@ -65,8 +69,8 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(map! :leader
-      :desc "Org babel tangle" "m B" #'org-babel-tangle)
+;; (map! :leader
+;;       :desc "Org babel tangle" "m B" #'org-babel-tangle)
 (after! org
   (setq org-directory "~/Documents/org/"
         org-default-notes-file (expand-file-name "notes.org" org-directory)
@@ -257,3 +261,57 @@
 (add-hook 'markdown-mode-hook 'prefer-horizontal-split)
 (map! :leader
       :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window)
+
+;; lsp java
+;;
+;; (when (modulep! :lang java +lsp)
+;;   (after! lsp-java
+;;     (push "-javaagent:~/.local/share/nvim/mason/packages/jdtls/lombok.jar"
+;;           lsp-java-vmargs)))
+(when (featurep! :lang java +lsp)
+  (setq lsp-java-maven-download-sources t
+        lsp-java-autobuild-enabled nil
+        lsp-java-selection-enabled nil
+        lsp-java-code-generation-use-blocks t
+        lsp-java-code-generation-generate-comments t
+        lsp-java-code-generation-to-string-code-style "STRING_BUILDER")
+
+  ;; Lombok support
+  ;; See https://github.com/redhat-developer/vscode-java/wiki/Lombok-support
+  (after! lsp-java
+    (push (concat "-javaagent:"
+                  (expand-file-name "~/.local/share/nvim/mason/packages/jdtls/lombok.jar"))
+          lsp-java-vmargs))
+
+  ;; Groovy
+  (add-hook 'groovy-mode-local-vars-hook #'lsp!))
+(map! :map dap-mode-map
+      :leader
+      :prefix ("d" . "dap")
+      ;; basics
+      :desc "dap next"          "n" #'dap-next
+      :desc "dap step in"       "i" #'dap-step-in
+      :desc "dap step out"      "o" #'dap-step-out
+      :desc "dap continue"      "c" #'dap-continue
+      :desc "dap hydra"         "h" #'dap-hydra
+      :desc "dap debug restart" "r" #'dap-debug-restart
+      :desc "dap debug"         "s" #'dap-debug
+
+      ;; debug
+      :prefix ("dd" . "Debug")
+      :desc "dap debug recent"  "r" #'dap-debug-recent
+      :desc "dap debug last"    "l" #'dap-debug-last
+
+      ;; eval
+      :prefix ("de" . "Eval")
+      :desc "eval"                "e" #'dap-eval
+      :desc "eval region"         "r" #'dap-eval-region
+      :desc "eval thing at point" "s" #'dap-eval-thing-at-point
+      :desc "add expression"      "a" #'dap-ui-expressions-add
+      :desc "remove expression"   "d" #'dap-ui-expressions-remove
+
+      :prefix ("db" . "Breakpoint")
+      :desc "dap breakpoint toggle"      "b" #'dap-breakpoint-toggle
+      :desc "dap breakpoint condition"   "c" #'dap-breakpoint-condition
+      :desc "dap breakpoint hit count"   "h" #'dap-breakpoint-hit-condition
+      :desc "dap breakpoint log message" "l" #'dap-breakpoint-log-message)
