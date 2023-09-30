@@ -1,14 +1,108 @@
-(beacon-mode 1)
+#+TITLE: Kyle's Doom Emacs Config
+#+PROPERTY: org-babel-default-header-args :tangle yes
+#+AUTHOR: Kyle Wilson
+#+DESCRIPTION: KW's personal Doom Emacs config.
+#+STARTUP: showeverything
 
+* TABLE OF CONTENTS :toc:
+- [[#about-this-config][ABOUT THIS CONFIG]]
+- [[#email][EMAIL]]
+- [[#beacon][BEACON]]
+- [[#setup][SETUP]]
+- [[#proxy][PROXY]]
+- [[#elfeed][ELFEED]]
+- [[#fonts][FONTS]]
+- [[#theme][THEME]]
+- [[#line-number][LINE-NUMBER]]
+- [[#dired][DIRED]]
+  - [[#map][MAP]]
+  - [[#trash][TRASH]]
+- [[#org][ORG]]
+  - [[#tangle][TANGLE]]
+  - [[#org-mode][ORG-MODE]]
+  - [[#org-agenda][ORG-AGENDA]]
+- [[#sublimity][SUBLIMITY]]
+- [[#markdown][MARKDOWN]]
+- [[#window][WINDOW]]
+- [[#lsp-java][LSP-JAVA]]
+- [[#dap][DAP]]
+- [[#eaf][EAF]]
+
+* ABOUT THIS CONFIG
+This is my personal Doom Emacs config.
+
+Place your private configuration here! Remember, you do not need to run 'doom sync' after modifying this file!
+
+Whenever you reconfigure a package, make sure to wrap your config in an
+`after!' block, otherwise Doom's defaults may override your settings. E.g.
+
+  (after! PACKAGE
+    (setq x y))
+
+The exceptions to this rule:
+
+  - Setting file/directory variables (like `org-directory')
+  - Setting variables which explicitly tell you to set them before their
+    package is loaded (see 'C-h v VARIABLE' to look up their documentation).
+  - Setting doom variables (which start with 'doom-' or '+').
+
+Here are some additional functions/macros that will help you configure Doom.
+
+- `load!' for loading external *.el files relative to this one
+- `use-package!' for configuring packages
+- `after!' for running code after a package has loaded
+- `add-load-path!' for adding directories to the `load-path', relative to
+  this file. Emacs searches the `load-path' when you load packages with
+  `require' or `use-package'.
+- `map!' for binding new keys
+
+To get information about any of these functions/macros, move the cursor over
+the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
+This will open documentation for it, including demos of how they are used.
+Alternatively, use `C-h o' to look up a symbol (functions, variables, faces,
+etc).
+
+You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
+they are implemented.
+
+* EMAIL
+Some functionality uses this to identify you, e.g. GPG configuration, email clients, file templates and snippets. It is optional.
+
+#+begin_src emacs-lisp :tangle no
+(setq user-full-name "John Doe"
+      user-mail-address "john@doe.com")
+#+end_src
+
+* BEACON
+Never lose your cursor.  When you scroll, your cursor will shine!  This is a global minor-mode. Turn it on everywhere with:
+
+#+begin_src emacs-lisp
+(beacon-mode 1)
+#+end_src
+
+* SETUP
+Maximize the Emacs frame on startup.
+
+#+begin_src emacs-lisp
 ;; (pushnew! initial-frame-alist '(width . 200) '(height . 55))
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
 ;; (add-hook 'window-setup-hook #'toggle-frame-fullscreen)
+#+end_src
 
+* PROXY
+This variable is an alist of URL schemes and proxy servers that gateway them.
+
+#+begin_src emacs-lisp
 (setq url-proxy-services
    '(("no_proxy" . "^\\(localhost\\|10\\..*\\|192\\.168\\..*\\)")
      ("http" . "127.0.0.1:1087")
      ("https" . "127.0.0.1:1087")))
+#+end_src
 
+* ELFEED
+Read RSS feeds in the comfort of Emacs.
+
+#+begin_src emacs-lisp
 (setq http-proxy "http://127.0.0.1:1087")
 (setq elfeed-goodies/entry-pane-size 0.5)
 (use-package mb-url-http
@@ -21,30 +115,81 @@
   (advice-add 'url-http :around 'mb-url-http-around-advice))
 ;; Automatically updating feed when opening elfeed
 ;; (add-hook! 'elfeed-search-mode-hook #'elfeed-update)
+#+end_src
 
+* FONTS
+Doom exposes five (optional) variables for controlling fonts in Doom:
+
+- `doom-font' -- the primary font to use
+- `doom-variable-pitch-font' -- a non-monospace font (where applicable)
+- `doom-big-font' -- used for `doom-big-font-mode'; use this for
+  presentations or streaming.
+- `doom-unicode-font' -- for unicode glyphs
+- `doom-serif-font' -- for the `fixed-pitch-serif' face
+
+See 'C-h v doom-font' for documentation and more examples of what they
+accept. For example:
+
+If you or Emacs can't find your font, use 'M-x describe-font' to look them
+up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
+refresh your font settings. If Emacs still can't find your font, it likely
+wasn't installed correctly. Font issues are rarely Doom issues!
+
+#+begin_src emacs-lisp
 (setq doom-font (font-spec :family "Hack Nerd Font" :size 15 :weight 'normal)
      doom-variable-pitch-font (font-spec :family "Hack Nerd Font" :size 15 :weight 'normal)
      doom-big-font (font-spec :family "Hack Nerd Font" :size 18 :weight 'normal))
+#+end_src
 
+* THEME
+There are two ways to load a theme. Both assume the theme is installed and
+available. You can either set `doom-theme' or manually load a theme with the
+`load-theme' function. This is the default:
+
+#+begin_src emacs-lisp
 (setq doom-theme 'doom-one)
+#+end_src
 
+* LINE-NUMBER
+This determines the style of line numbers in effect. If set to `nil', line
+numbers are disabled. For relative line numbers, set this to `relative'.
+
+#+begin_src emacs-lisp
 (setq display-line-numbers-type 'relative)
+#+end_src
 
+* DIRED
+Dired is the file manager within Emacs.
+** MAP
+#+begin_src emacs-lisp :tangle yes
 (evil-define-key 'normal dired-mode-map
   (kbd "h") 'dired-up-directory
   (kbd "l") 'dired-find-file ; use dired-find-file instead of dired-open.
 )
-
+#+end_src
+** TRASH
+Making deleted files go to trash can.
+#+begin_src emacs-lisp
 (setq delete-by-moving-to-trash t
       trash-directory "~/Trash/")
+#+end_src
 
+* ORG
+I wrapped most of this block in (after! org).  Without this, my settings might be evaluated too early, which will result in my settings being overwritten by Doom’s defaults.  I have also enabled org-journal, org-superstar by adding (+journal +pretty) to the org section of my Doom Emacs init.el.
+
+** TANGLE
+
+#+begin_src emacs-lisp :tangle yes
 (setq org-babel-default-header-args
       (cons '(:tangle . "yes")
             (assq-delete-all :tangle org-babel-default-header-args)))
 
 ;; (map! :leader
 ;;       :desc "Org babel tangle" "m B" #'org-babel-tangle)
+#+end_src
 
+** ORG-MODE
+#+begin_src emacs-lisp
 (after! org
   (setq org-directory "~/Documents/org/"
         org-default-notes-file (expand-file-name "notes.org" org-directory)
@@ -72,7 +217,11 @@
              "|"                 ; The pipe necessary to separate "active" states and "inactive" states
              "DONE(d)"           ; Task has been completed
              "CANCELLED(c)" )))) ; Task has been cancelled
+#+end_src
 
+** ORG-AGENDA
+
+#+begin_src emacs-lisp
 (after! org
   (setq org-agenda-files '("~/Documents/org/agenda.org")))
 (setq
@@ -102,7 +251,12 @@
 
           (agenda "")
           (alltodo "")))))
+#+end_src
 
+* SUBLIMITY
+smooth-scrolling, minimap and distraction-free mode.
+
+#+begin_src emacs-lisp
 (require 'sublimity)
 (require 'sublimity-scroll)
 ;; (require 'sublimity-map) ;; experimental
@@ -124,7 +278,12 @@
 ;; (sublimity-attractive-hide-vertical-border)
 ;; (sublimity-attractive-hide-fringes)
 ;; (sublimity-attractive-hide-modelines)
+#+end_src
 
+* MARKDOWN
+Beautify markdown on emacs.
+
+#+begin_src emacs-lisp
 (custom-set-faces!
 '(markdown-header-delimiter-face :foreground "#616161" :height 0.9)
 '(markdown-header-face-1 :height 1.7 :foreground "#A3BE8C" :weight extra-bold :inherit markdown-header-face)
@@ -137,14 +296,22 @@
 ;; (use-package markdown-mode :ensure t
 ;;   :init
 ;;   (setq-default markdown-hide-markup t))
+#+end_src
 
+* WINDOW
+
+#+begin_src emacs-lisp
 (defun prefer-horizontal-split ()
   (set-variable 'split-height-threshold nil t)
   (set-variable 'split-width-threshold 40 t)) ; make this as low as needed
 (add-hook 'markdown-mode-hook 'prefer-horizontal-split)
 (map! :leader
       :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window)
+#+end_src
 
+* LSP-JAVA
+
+#+begin_src emacs-lisp
 (when (featurep! :lang java +lsp)
   (setq lsp-java-maven-download-sources t
         lsp-java-autobuild-enabled nil
@@ -162,7 +329,11 @@
 
   ;; Groovy
   (add-hook 'groovy-mode-local-vars-hook #'lsp!))
+#+end_src
 
+* DAP
+
+#+begin_src emacs-lisp
 (map! :map dap-mode-map
       :leader
       :prefix ("d" . "dap")
@@ -193,3 +364,59 @@
       :desc "dap breakpoint condition"   "c" #'dap-breakpoint-condition
       :desc "dap breakpoint hit count"   "h" #'dap-breakpoint-hit-condition
       :desc "dap breakpoint log message" "l" #'dap-breakpoint-log-message)
+#+end_src
+
+* EAF
+
+#+begin_src emacs-lisp :tangle no
+(use-package! eaf
+   ;; 设定只有手动调用以下命令后，eaf才会加载
+   :commands (eaf-open eaf-open-bookmark eaf-open-browser eaf-open-browser-with-history)
+   :init
+   ;; 设定emacs中打开链接默认使用eaf打开
+   (setq browse-url-browser-function 'eaf-open-browser)
+   (defalias 'browse-web #'eaf-open-browser)
+   ;; 定义了一个用于开启eaf debug模式的函数
+   (defun +eaf-enable-debug ()
+     (interactive)
+       (setq eaf-enable-debug t))
+   ;; :custom
+   ;; ;; 设定eaf代理
+   ;; (eaf-proxy-type "socks5")
+   ;; (eaf-proxy-host "127.0.0.1")
+   ;; (eaf-proxy-port "1086")
+   :config
+   ;; 下面的require都是引入你已经安装的eaf扩展
+   (require 'eaf-image-viewer)
+   ;; (require 'eaf-demo)
+   ;; (require 'eaf-git)
+   (require 'eaf-browser)
+   (require 'eaf-pdf-viewer)
+
+   ;; (require 'eaf-evil)
+   ;; 使得在eaf buffer下能正常使用evil的keymap
+   (define-key key-translation-map (kbd "SPC")
+     (lambda (prompt)
+       (if (derived-mode-p 'eaf-mode)
+           (pcase eaf--buffer-app-name
+             ("browser" (if  (string= (eaf-call-sync "call_function" eaf--buffer-id "is_focus") "True")
+                            (kbd "SPC")
+                          (kbd eaf-evil-leader-key)))
+             ("pdf-viewer" (kbd eaf-evil-leader-key))
+             ("image-viewer" (kbd eaf-evil-leader-key))
+             (_  (kbd "SPC")))
+         (kbd "SPC"))))
+   ;; 设定eaf默认搜索引擎
+   (setq eaf-browser-default-search-engine "google")
+   ;; 设定eaf开启广告屏蔽器
+   (setq eaf-browser-enable-adblocker t)
+   ;; 设定eaf浏览器的缩放
+   (setq eaf-browser-default-zoom 1.2)
+   ;; 修复鼠标乱跑的问题，让她一直放在左下角
+   (setq mouse-avoidance-banish-position '((frame-or-window . frame)
+                                           (side . right)
+                                           (side-pos . 100)
+                                           (top-or-bottom . bottom)
+                                           (top-or-bottom-pos . -100)))
+   (mouse-avoidance-mode 'banish))
+#+end_src
