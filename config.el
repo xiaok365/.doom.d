@@ -9,6 +9,15 @@
      ("http" . "127.0.0.1:1087")
      ("https" . "127.0.0.1:1087")))
 
+(map! :leader
+      (:prefix ("e" . "open file")
+       :desc "Edit agenda file"      "a" #'(lambda () (interactive) (find-file "~/Documents/org/agenda.org"))
+       :desc "Edit elfeed file"      "e" #'(lambda () (interactive) (find-file "~/Documents/org/elfeed.org"))
+       :desc "Edit travel file"      "t" #'(lambda () (interactive) (find-file "~/Documents/org/travel.org"))
+       :desc "Edit doom config.org"  "c" #'(lambda () (interactive) (find-file "~/.config/doom/config.org"))
+       :desc "Edit doom init.el"     "i" #'(lambda () (interactive) (find-file "~/.config/doom/init.el"))
+       :desc "Edit doom packages.el" "p" #'(lambda () (interactive) (find-file "~/.config/doom/packages.el"))))
+
 (setq http-proxy "http://127.0.0.1:1087")
 (setq elfeed-goodies/entry-pane-size 0.5)
 (use-package mb-url-http
@@ -37,6 +46,10 @@
 
 (setq delete-by-moving-to-trash t
       trash-directory "~/Trash/")
+
+(after! counsel
+  (setq counsel-rg-base-command
+        "rg -M 240 --hidden --with-filename --no-heading --line-number --color never %s"))
 
 (setq org-babel-default-header-args
       (cons '(:tangle . "yes")
