@@ -9,6 +9,9 @@
      ("http" . "127.0.0.1:1087")
      ("https" . "127.0.0.1:1087")))
 
+(set-frame-parameter (selected-frame) 'alpha '(95 95))
+(add-to-list 'default-frame-alist '(alpha 95 95))
+
 (map! :leader
       (:prefix ("e" . "open file")
        :desc "Edit agenda file"      "a" #'(lambda () (interactive) (find-file "~/Documents/org/agenda.org"))
@@ -39,10 +42,25 @@
 
 (setq display-line-numbers-type 'relative)
 
-(evil-define-key 'normal dired-mode-map
-  (kbd "h") 'dired-up-directory
-  (kbd "l") 'dired-find-file ; use dired-find-file instead of dired-open.
-)
+(after! org
+(defun dt/org-colors-doom-one ()
+  "Enable Doom One colors for Org headers."
+  (interactive)
+  (dolist
+      (face
+       '((org-level-1 1.7 "#51afef" ultra-bold)
+         (org-level-2 1.6 "#c678dd" extra-bold)
+         (org-level-3 1.5 "#98be65" bold)
+         (org-level-4 1.4 "#da8548" semi-bold)
+         (org-level-5 1.3 "#5699af" normal)
+         (org-level-6 1.2 "#a9a1e1" normal)
+         (org-level-7 1.1 "#46d9ff" normal)
+         (org-level-8 1.0 "#ff6c6b" normal)))
+    (set-face-attribute (nth 0 face) nil :font doom-variable-pitch-font :weight (nth 3 face) :height (nth 1 face) :foreground (nth 2 face)))
+    (set-face-attribute 'org-table nil :font doom-font :weight 'normal :height 1.0 :foreground "#bfafdf"))
+
+;; Load our desired dt/org-colors-* theme on startup
+(dt/org-colors-doom-one))
 
 (setq delete-by-moving-to-trash t
       trash-directory "~/Trash/")

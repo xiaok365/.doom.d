@@ -10,13 +10,14 @@
 - [[#beacon][BEACON]]
 - [[#setup][SETUP]]
 - [[#proxy][PROXY]]
+- [[#transparency][TRANSPARENCY]]
 - [[#open-specific-files][OPEN SPECIFIC FILES]]
 - [[#elfeed][ELFEED]]
 - [[#fonts][FONTS]]
 - [[#theme][THEME]]
 - [[#line-number][LINE-NUMBER]]
 - [[#dired][DIRED]]
-  - [[#map][MAP]]
+  - [[#org-fonts][ORG-FONTS]]
   - [[#trash][TRASH]]
   - [[#search][SEARCH]]
 - [[#org][ORG]]
@@ -68,7 +69,7 @@ You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 they are implemented.
 
 * EMAIL
-Some functionality uses this to identify you, e.g. GPG configuration, email clients, file templates and snippets. It is optional.
+Some     functionality uses this to identify you, e.g. GPG configuration, email clients, file templates and snippets. It is optional.
 
 #+begin_src emacs-lisp :tangle no
 (setq user-full-name "John Doe"
@@ -99,6 +100,14 @@ This variable is an alist of URL schemes and proxy servers that gateway them.
    '(("no_proxy" . "^\\(localhost\\|10\\..*\\|192\\.168\\..*\\)")
      ("http" . "127.0.0.1:1087")
      ("https" . "127.0.0.1:1087")))
+#+end_src
+
+* TRANSPARENCY
+Make background transparent.
+
+#+begin_src emacs-lisp
+(set-frame-parameter (selected-frame) 'alpha '(95 95))
+(add-to-list 'default-frame-alist '(alpha 95 95))
 #+end_src
 
 * OPEN SPECIFIC FILES
@@ -176,13 +185,31 @@ numbers are disabled. For relative line numbers, set this to `relative'.
 
 * DIRED
 Dired is the file manager within Emacs.
-** MAP
+
+** ORG-FONTS
+
 #+begin_src emacs-lisp
-(evil-define-key 'normal dired-mode-map
-  (kbd "h") 'dired-up-directory
-  (kbd "l") 'dired-find-file ; use dired-find-file instead of dired-open.
-)
+(after! org
+(defun dt/org-colors-doom-one ()
+  "Enable Doom One colors for Org headers."
+  (interactive)
+  (dolist
+      (face
+       '((org-level-1 1.7 "#51afef" ultra-bold)
+         (org-level-2 1.6 "#c678dd" extra-bold)
+         (org-level-3 1.5 "#98be65" bold)
+         (org-level-4 1.4 "#da8548" semi-bold)
+         (org-level-5 1.3 "#5699af" normal)
+         (org-level-6 1.2 "#a9a1e1" normal)
+         (org-level-7 1.1 "#46d9ff" normal)
+         (org-level-8 1.0 "#ff6c6b" normal)))
+    (set-face-attribute (nth 0 face) nil :font doom-variable-pitch-font :weight (nth 3 face) :height (nth 1 face) :foreground (nth 2 face)))
+    (set-face-attribute 'org-table nil :font doom-font :weight 'normal :height 1.0 :foreground "#bfafdf"))
+
+;; Load our desired dt/org-colors-* theme on startup
+(dt/org-colors-doom-one))
 #+end_src
+
 ** TRASH
 Making deleted files go to trash can.
 #+begin_src emacs-lisp
