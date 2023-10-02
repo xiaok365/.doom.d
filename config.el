@@ -38,29 +38,9 @@
      doom-variable-pitch-font (font-spec :family "Hack Nerd Font" :size 15 :weight 'normal)
      doom-big-font (font-spec :family "Hack Nerd Font" :size 18 :weight 'normal))
 
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-xcode)
 
 (setq display-line-numbers-type 'relative)
-
-(after! org
-(defun dt/org-colors-doom-one ()
-  "Enable Doom One colors for Org headers."
-  (interactive)
-  (dolist
-      (face
-       '((org-level-1 1.7 "#51afef" ultra-bold)
-         (org-level-2 1.6 "#c678dd" extra-bold)
-         (org-level-3 1.5 "#98be65" bold)
-         (org-level-4 1.4 "#da8548" semi-bold)
-         (org-level-5 1.3 "#5699af" normal)
-         (org-level-6 1.2 "#a9a1e1" normal)
-         (org-level-7 1.1 "#46d9ff" normal)
-         (org-level-8 1.0 "#ff6c6b" normal)))
-    (set-face-attribute (nth 0 face) nil :font doom-variable-pitch-font :weight (nth 3 face) :height (nth 1 face) :foreground (nth 2 face)))
-    (set-face-attribute 'org-table nil :font doom-font :weight 'normal :height 1.0 :foreground "#bfafdf"))
-
-;; Load our desired dt/org-colors-* theme on startup
-(dt/org-colors-doom-one))
 
 (setq delete-by-moving-to-trash t
       trash-directory "~/Trash/")
@@ -75,6 +55,17 @@
 
 ;; (map! :leader
 ;;       :desc "Org babel tangle" "m B" #'org-babel-tangle)
+
+(custom-set-faces
+  '(org-level-1 ((t (:inherit outline-1 :height 1.7))))
+  '(org-level-2 ((t (:inherit outline-2 :height 1.6))))
+  '(org-level-3 ((t (:inherit outline-3 :height 1.5))))
+  '(org-level-4 ((t (:inherit outline-4 :height 1.4))))
+  '(org-level-5 ((t (:inherit outline-5 :height 1.3))))
+  '(org-level-6 ((t (:inherit outline-6 :height 1.2))))
+  '(org-level-7 ((t (:inherit outline-7 :height 1.1))))
+  '(org-level-8 ((t (:inherit outline-8 :height 1.0))))
+)
 
 (after! org
   (setq org-directory "~/Documents/org/"
