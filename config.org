@@ -1,5 +1,4 @@
 #+TITLE: Kyle's Doom Emacs Config
-#+PROPERTY: org-babel-default-header-args :tangle yes
 #+AUTHOR: Kyle Wilson
 #+DESCRIPTION: KW's personal Doom Emacs config.
 #+STARTUP: showeverything
