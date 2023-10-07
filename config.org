@@ -69,7 +69,7 @@ You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 they are implemented.
 
 * EMAIL
-Some     functionality uses this to identify you, e.g. GPG configuration, email clients, file templates and snippets. It is optional.
+Some functionality uses this to identify you, e.g. GPG configuration, email clients, file templates and snippets. It is optional.
 
 #+begin_src emacs-lisp :tangle no
 (setq user-full-name "John Doe"
