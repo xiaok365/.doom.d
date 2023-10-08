@@ -215,3 +215,8 @@
       :desc "dap breakpoint condition"   "c" #'dap-breakpoint-condition
       :desc "dap breakpoint hit count"   "h" #'dap-breakpoint-hit-condition
       :desc "dap breakpoint log message" "l" #'dap-breakpoint-log-message)
+
+(define-key evil-motion-state-map (kbd "C-h") #'evil-window-left)
+(define-key evil-motion-state-map (kbd "C-j") #'evil-window-down)
+(define-key evil-motion-state-map (kbd "C-k") #'evil-window-up)
+(define-key evil-motion-state-map (kbd "C-l") #'evil-window-right)
