@@ -17,6 +17,7 @@
        :desc "Edit agenda file"      "a" #'(lambda () (interactive) (find-file "~/Documents/org/agenda.org"))
        :desc "Edit elfeed file"      "e" #'(lambda () (interactive) (find-file "~/Documents/org/elfeed.org"))
        :desc "Edit travel file"      "t" #'(lambda () (interactive) (find-file "~/Documents/org/travel.org"))
+       :desc "Edit englis file"      "l" #'(lambda () (interactive) (find-file "~/Documents/org/english.org"))
        :desc "Edit doom config.org"  "c" #'(lambda () (interactive) (find-file "~/.config/doom/config.org"))
        :desc "Edit doom init.el"     "i" #'(lambda () (interactive) (find-file "~/.config/doom/init.el"))
        :desc "Edit doom packages.el" "p" #'(lambda () (interactive) (find-file "~/.config/doom/packages.el"))))
