@@ -221,3 +221,18 @@
 (define-key evil-motion-state-map (kbd "C-j") #'evil-window-down)
 (define-key evil-motion-state-map (kbd "C-k") #'evil-window-up)
 (define-key evil-motion-state-map (kbd "C-l") #'evil-window-right)
+
+(defvar-local my-flycheck-local-cache nil)
+(defun my-flycheck-local-checker-get (fn checker property)
+  ;; Only check the buffer local cache for the LSP checker, otherwise we get
+  ;; infinite loops.
+  (if (eq checker 'lsp)
+      (or (alist-get property my-flycheck-local-cache)
+          (funcall fn checker property))
+    (funcall fn checker property)))
+(advice-add 'flycheck-checker-get
+            :around 'my-flycheck-local-checker-get)
+(add-hook 'lsp-managed-mode-hook
+          (lambda ()
+            (when (derived-mode-p 'go-mode)
+              (setq my-flycheck-local-cache '((next-checkers . (golangci-lint)))))))
