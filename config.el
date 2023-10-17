@@ -236,3 +236,7 @@
           (lambda ()
             (when (derived-mode-p 'go-mode)
               (setq my-flycheck-local-cache '((next-checkers . (golangci-lint)))))))
+(add-hook 'lsp-managed-mode-hook
+              (lambda ()
+                (when (derived-mode-p 'c++-mode)
+                  (setq my-flycheck-local-cache '((next-checkers . (c/c++-clang)))))))
