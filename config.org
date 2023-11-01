@@ -7,6 +7,7 @@
 - [[#about-this-config][ABOUT THIS CONFIG]]
 - [[#email][EMAIL]]
 - [[#beacon][BEACON]]
+- [[#work-wrap][WORK-WRAP]]
 - [[#setup][SETUP]]
 - [[#proxy][PROXY]]
 - [[#transparency][TRANSPARENCY]]
@@ -82,6 +83,12 @@ Never lose your cursor.  When you scroll, your cursor will shine!  This is a glo
 
 #+begin_src emacs-lisp
 (beacon-mode 1)
+#+end_src
+
+* WORK-WRAP
+
+#+begin_src emacs-lisp
+(+global-word-wrap-mode +1)
 #+end_src
 
 * SETUP

@@ -1,5 +1,7 @@
 (beacon-mode 1)
 
+(+global-word-wrap-mode +1)
+
 ;; (pushnew! initial-frame-alist '(width . 200) '(height . 55))
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
 ;; (add-hook 'window-setup-hook #'toggle-frame-fullscreen)
